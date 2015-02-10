@@ -1,0 +1,40 @@
+
+td {
+	text-align: center;
+}
+
+.missing {
+	color: red;
+	font-weight: bold;
+}
+
+.missing a {
+	color: red;
+}
+
+table input[type="text"] {
+	text-align: center;
+}
+
+input.highlight {
+	background-color: rgba(249, 255, 0, 0.56);
+	-webkit-transition:background 3s;
+	-moz-transition:background 3s;
+	-o-transition:background 3s;
+	transition:background 3s
+}
+
+input.missing {
+	background-color: rgba(255, 0, 0, 0.25);
+}
+
+tr.disabled, tr.disabled a {
+	color: lightgray;
+}
+
+td.empty {
+	background-color: rgb(236, 48, 69);
+}
+td.okay {
+	background-color: lightgreen;
+}

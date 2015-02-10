@@ -1,0 +1,184 @@
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>lmu-navigator</display-name>
+ 
+	<servlet>
+		<servlet-name>lmu-navigator</servlet-name>
+		<servlet-class>
+                     com.sun.jersey.spi.container.servlet.ServletContainer
+                </servlet-class>
+		<init-param>
+		     <param-name>com.sun.jersey.config.property.packages</param-name>
+		     <param-value>de.lmu.navigator.server</param-value>
+		</init-param>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+ 
+ 	<!-- RESTful Service -->
+	<servlet-mapping>
+		<servlet-name>lmu-navigator</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	
+	
+	<!-- Overview of imported Data -->
+	<servlet>
+		<servlet-name>DataOverview</servlet-name>
+		<servlet-class>de.lmu.navigator.server.data.DataOverview</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DataOverview</servlet-name>
+		<url-pattern>/data/</url-pattern>
+	</servlet-mapping>
+		
+	<!-- Calculate mapSize -->
+	<servlet>
+		<servlet-name>CalculateMapSize</servlet-name>
+		<servlet-class>de.lmu.navigator.server.data.CalculateMapSize</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CalculateMapSize</servlet-name>
+		<url-pattern>/data/calculate/mapsize</url-pattern>
+	</servlet-mapping>
+		
+	<!-- Positioning of rooms -->
+	<servlet>
+		<servlet-name>CalculateRoomPosition</servlet-name>
+		<servlet-class>de.lmu.navigator.server.data.CalculateRoomPosition</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CalculateRoomPosition</servlet-name>
+		<url-pattern>/data/calculate/roomposition</url-pattern>
+	</servlet-mapping>
+		
+	<!-- Positioning of Buildings -->
+	<servlet>
+		<servlet-name>CalculateBuildingPosition</servlet-name>
+		<servlet-class>de.lmu.navigator.server.data.CalculateBuildingPosition</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CalculateBuildingPosition</servlet-name>
+		<url-pattern>/data/buildings</url-pattern>
+	</servlet-mapping>
+		
+	<!-- Rooms -->
+	<servlet>
+		<servlet-name>RoomOverview</servlet-name>
+		<servlet-class>de.lmu.navigator.server.data.RoomOverview</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RoomOverview</servlet-name>
+		<url-pattern>/data/rooms</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ChangeRoomVisibility</servlet-name>
+		<servlet-class>de.lmu.navigator.server.data.ChangeRoomVisibility</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ChangeRoomVisibility</servlet-name>
+		<url-pattern>/data/roomVisibility</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ChangeFloorVisibility</servlet-name>
+		<servlet-class>de.lmu.navigator.server.data.ChangeFloorVisibility</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ChangeFloorVisibility</servlet-name>
+		<url-pattern>/data/floorVisibility</url-pattern>
+	</servlet-mapping>
+		
+	<!-- TODO temp - allows to clear data without PhpMyAdmin -->
+	<servlet>
+		<servlet-name>ClearData</servlet-name>
+		<servlet-class>de.lmu.navigator.server.data.ClearData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ClearData</servlet-name>
+		<url-pattern>/data/clear</url-pattern>
+	</servlet-mapping>
+	
+	
+	<!-- Upload / Maintenance -->
+	<servlet>
+		<servlet-name>UploadOverview</servlet-name>
+		<servlet-class>de.lmu.navigator.server.upload.UploadOverview</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UploadOverview</servlet-name>
+		<url-pattern>/upload/</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ClearCSVImport</servlet-name>
+		<servlet-class>de.lmu.navigator.server.upload.ClearData</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ClearCSVImport</servlet-name>
+		<url-pattern>/upload/clear</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>CityServlet</servlet-name>
+		<servlet-class>de.lmu.navigator.server.upload.CityServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CityServlet</servlet-name>
+		<url-pattern>/upload/city</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>StreetServlet</servlet-name>
+		<servlet-class>de.lmu.navigator.server.upload.StreetServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StreetServlet</servlet-name>
+		<url-pattern>/upload/street</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>BuildingServlet</servlet-name>
+		<servlet-class>de.lmu.navigator.server.upload.BuildingServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BuildingServlet</servlet-name>
+		<url-pattern>/upload/building</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>BuildingPartServlet</servlet-name>
+		<servlet-class>de.lmu.navigator.server.upload.BuildingPartServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BuildingPartServlet</servlet-name>
+		<url-pattern>/upload/buildingpart</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>FloorServlet</servlet-name>
+		<servlet-class>de.lmu.navigator.server.upload.FloorServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FloorServlet</servlet-name>
+		<url-pattern>/upload/floor</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>RoomServlet</servlet-name>
+		<servlet-class>de.lmu.navigator.server.upload.RoomServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RoomServlet</servlet-name>
+		<url-pattern>/upload/room</url-pattern>
+	</servlet-mapping>
+ 
+</web-app>

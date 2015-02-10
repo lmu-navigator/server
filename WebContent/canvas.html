@@ -1,0 +1,305 @@
+<html>
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+body {
+	text-align: center;
+}
+</style>
+</head>
+<body>
+
+<script> 
+
+var floorCode = "g011000";
+
+function getParameterByName(name) {
+	 return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+}
+
+floorCode = getParameterByName("floor");
+</script>
+
+<div style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;">
+	<canvas id="canvas" style="border:1px solid #000000;">Canvas cannot be displayed.</canvas>
+</div>
+
+<script>
+
+
+/* 1) Reposition Manually */
+positionManually = false;
+var roomCode = "";
+
+	$(document).keyup(function(e) {
+		if (e.keyCode == 27) {		// ESC
+			positionManually = false;
+			parent.scrollToTop();
+		}
+	});
+
+	// activate the measuring routine
+	function positionRoomManually(code) 
+	{
+		roomCode = code;
+		positionManually = true;
+	}
+	
+	// send position outside of iframe
+	function updatePosition(x, y) {
+		parent.updatedRoomPosition(roomCode, Math.floor(x), Math.floor(y));
+		positionManually = false;
+	}
+	  
+window.onload = function(){ 
+
+	var mapPng = "";
+	var mapUri = "";
+	
+	var rooms, borderingRooms = [];
+	var ratio;
+	
+	/* 2) draw canvas for floorMap */
+	var canvas = document.getElementsByTagName('canvas')[0];
+	canvas.width = 800; canvas.height = 600;
+	
+	var floormap = new Image;
+	var point = new Image;
+	
+	/* var zoomIn = new Image, zoomOut = new Image;
+		zoomIn.src = 'img/zoom_in.png';
+		zoomOut.src = 'img/zoom_out.png';
+	var zoomButtonSize = 20; */
+	
+	/* 3) load all relevant data via REST */
+	$(function() {
+		  var mapSize;
+		  
+		  // get mapURI (floors)
+		  $.getJSON( "rest/floors/" + floorCode)
+		    .done(function( json ) {
+		        console.log( "mapURI: " + json.mapUri );
+		        mapUri = json.mapUri;
+		        
+		        mapSize = {x: json.mapSizeX, y: json.mapSizeY};
+		    });
+		  
+		  // load all rooms
+		  $.getJSON( "rest/rooms?floor=" + floorCode)
+		  .done(function( roomsJSON ) {
+			  rooms = roomsJSON;
+			  
+			  if (rooms != null)
+		      	console.log( "#rooms: " + rooms.length );
+		           
+		      ratio = canvas.width / mapSize.x;
+		      mapPng = mapUri.replace(".pdf", ".png");
+		      floormap.src = 'http://141.84.213.246:8080/lmu-data/png/' + mapPng;
+//		      floormap.src = 'http://localhost/lmu-data/png/' + mapPng;
+			  
+			  floormap.width = mapSize.x * ratio;
+			  floormap.height = mapSize.y * ratio;
+
+			  // load bordering floors
+	  		  $.getJSON( "rest/floors/" + floorCode + "/bordering")
+		 	  .done(function( borderingFloors ) {
+				  if (borderingFloors != null) {
+					  if (borderingFloors.length >= 1) {
+		
+					  	for (var i = 0; i < borderingFloors.length; i++) {
+					  		console.log("> borderingFloor: "+borderingFloors[i].code);
+					  		
+					  		// load all Rooms from borderingFloors
+						  	$.getJSON( "rest/rooms?floor=" + borderingFloors[i].code)
+						  	.done(function( newRooms ) {
+
+								// concatenate rooms of borderingFloors						  			
+					  			borderingRooms = borderingRooms.concat(newRooms);
+						  			
+								// only drawCanvas() on last loop
+								if (i === borderingFloors.length)
+						  			drawCanvas(rooms, borderingRooms, ratio);
+						  	});
+					  	}
+					  }
+				   } else {
+					   console.log("> no bordering floors"); 
+					   drawCanvas(rooms, [], ratio);
+				   }
+			  });
+		  });
+		});
+	
+	
+	function drawCanvas(rooms, borderingRooms, ratio){		
+		
+		var ctx = canvas.getContext('2d');
+		trackTransforms(ctx);
+		
+		redraw();
+		
+		// Draw a colored Point on the Canvas
+		var pointSize = 4;
+		function drawPoint(posX, posY) {
+			ctx.fillRect( (posX*ratio)-pointSize/2 , (posY*ratio)-pointSize/2, pointSize, pointSize);
+		}
+		
+		function redraw(){
+			
+			/* ctx.drawImage(zoomIn, (canvas.width-zoomButtonSize-5), (canvas.height-2*zoomButtonSize-5), zoomButtonSize, zoomButtonSize);
+			ctx.drawImage(zoomOut, (canvas.width-zoomButtonSize-5), (canvas.height-zoomButtonSize-5), zoomButtonSize, zoomButtonSize); */
+			
+			// Clear the entire canvas
+			var p1 = ctx.transformedPoint(0,0);
+			var p2 = ctx.transformedPoint(canvas.width,canvas.height);
+			ctx.clearRect(p1.x,p1.y,p2.x-p1.x,p2.y-p1.y);
+	
+			ctx.drawImage(floormap, 0,0, floormap.width, floormap.height);
+						
+			// draw primary rooms, of targeted floor
+			ctx.fillStyle="#00FF00";
+			if (typeof rooms !== 'undefined' && rooms.length >= 1) {
+				for (i = 0; i < rooms.length; i++) { 
+					drawPoint(rooms[i].posX, rooms[i].posY);
+				}	
+			}
+			
+			// draw secondary rooms, of bordering floors
+			ctx.fillStyle="#FFA500";
+			if (typeof borderingRooms[0] !== 'undefined') {
+				for (j = 0; j < borderingRooms.length; j++) { 
+					drawPoint(borderingRooms[j].posX, borderingRooms[j].posY);
+				}				
+			}
+
+			
+		}
+		
+		redraw();
+		
+		var lastX=canvas.width/2, lastY=canvas.height/2;
+		var dragStart,dragged;
+		canvas.addEventListener('mousedown',function(evt){
+			document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
+			lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
+			lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
+			dragStart = ctx.transformedPoint(lastX,lastY);
+			dragged = false;
+			// lastX, lastY >> relative to Canvas
+			// dragStart >> relative to floorMap
+			
+			// console.log("Mouse Down (1):", dragStart);
+			if (positionManually == true) {
+				console.log("newPosition: x=%d, y=%d", dragStart.x/ratio, dragStart.y/ratio);
+				// send the new position back
+				updatePosition(dragStart.x/ratio, dragStart.y/ratio);
+				
+				// temporarily draw colored point, for user feedback
+				drawPoint(dragStart.x, dragStart.y);
+			}
+			
+		},false);
+		canvas.addEventListener('mousemove',function(evt){
+			lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
+			lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
+			
+			dragged = true;
+			if (dragStart){
+				var pt = ctx.transformedPoint(lastX,lastY);
+				ctx.translate(pt.x-dragStart.x,pt.y-dragStart.y);
+				redraw();
+			}
+		},false);
+		canvas.addEventListener('mouseup',function(evt){
+			dragStart = null;
+		},false);
+ 		canvas.addEventListener('dblclick',function(evt){
+			if (!positionManually) zoom(evt.shiftKey ? -1 : 1 );
+		},false);
+ 		
+ 		// TODO: add EventListener for ZoomIn / Zoom Out
+	
+		var scaleFactor = 1.1;
+		var zoom = function(clicks){
+			var pt = ctx.transformedPoint(lastX,lastY);
+			ctx.translate(pt.x,pt.y);
+			var factor = Math.pow(scaleFactor,clicks);
+			ctx.scale(factor,factor);
+			ctx.translate(-pt.x,-pt.y);
+			redraw();
+		}
+	
+		var handleScroll = function(evt){
+			var delta = evt.wheelDelta ? evt.wheelDelta/40 : evt.detail ? -evt.detail : 0;
+			if (delta) zoom(delta);
+			return evt.preventDefault() && false;
+			console.log("Delta", delta);
+		};
+		canvas.addEventListener('DOMMouseScroll',handleScroll,false);
+		canvas.addEventListener('mousewheel',handleScroll,false);
+	};
+	
+	
+	// Adds ctx.getTransform() - returns an SVGMatrix
+	// Adds ctx.transformedPoint(x,y) - returns an SVGPoint
+	function trackTransforms(ctx){
+		var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
+		var xform = svg.createSVGMatrix();
+		ctx.getTransform = function(){ return xform; };
+		
+		var savedTransforms = [];
+		var save = ctx.save;
+		ctx.save = function(){
+			savedTransforms.push(xform.translate(0,0));
+			return save.call(ctx);
+		};
+		var restore = ctx.restore;
+		ctx.restore = function(){
+			xform = savedTransforms.pop();
+			return restore.call(ctx);
+		};
+	
+		var scale = ctx.scale;
+		ctx.scale = function(sx,sy){
+			xform = xform.scaleNonUniform(sx,sy);
+			return scale.call(ctx,sx,sy);
+		};
+		var rotate = ctx.rotate;
+		ctx.rotate = function(radians){
+			xform = xform.rotate(radians*180/Math.PI);
+			return rotate.call(ctx,radians);
+		};
+		var translate = ctx.translate;
+		ctx.translate = function(dx,dy){
+			xform = xform.translate(dx,dy);
+			return translate.call(ctx,dx,dy);
+		};
+		var transform = ctx.transform;
+		ctx.transform = function(a,b,c,d,e,f){
+			var m2 = svg.createSVGMatrix();
+			m2.a=a; m2.b=b; m2.c=c; m2.d=d; m2.e=e; m2.f=f;
+			xform = xform.multiply(m2);
+			return transform.call(ctx,a,b,c,d,e,f);
+		};
+		var setTransform = ctx.setTransform;
+		ctx.setTransform = function(a,b,c,d,e,f){
+			xform.a = a;
+			xform.b = b;
+			xform.c = c;
+			xform.d = d;
+			xform.e = e;
+			xform.f = f;
+			return setTransform.call(ctx,a,b,c,d,e,f);
+		};
+		var pt  = svg.createSVGPoint();
+		ctx.transformedPoint = function(x,y){
+			pt.x=x; pt.y=y;
+			return pt.matrixTransform(xform.inverse());
+		}
+	}
+
+}
+</script>
+
+</body>
+</html>
