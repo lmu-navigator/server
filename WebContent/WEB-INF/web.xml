@@ -181,4 +181,39 @@
 		<url-pattern>/upload/room</url-pattern>
 	</servlet-mapping>
  
+ 
+	<!-- Login / Authentication -->
+	<security-constraint>
+		<display-name>Login</display-name>
+		<web-resource-collection>
+			<web-resource-name>application</web-resource-name>
+			<url-pattern>/data/*</url-pattern>
+			<http-method>DELETE</http-method>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+			<http-method>PUT</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>lmunavi</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-constraint>
+		<display-name>Login</display-name>
+		<web-resource-collection>
+			<web-resource-name>application</web-resource-name>
+			<url-pattern>/upload/*</url-pattern>
+			<http-method>DELETE</http-method>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+			<http-method>PUT</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>lmunavi</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>application</realm-name>
+	</login-config>
+ 
 </web-app>
