@@ -142,16 +142,18 @@ public class RoutingEdges {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateRoutingEdge (RoutingEdge updatedRoutingEdge) throws Exception {
 	
-		db = new RoutingEdgeMySQL();			
-		
-		boolean roomUpdated = db.updateRoutingEdge(updatedRoutingEdge);
-				
-		db.close();
-		
-		if (roomUpdated)
-			return Response.status(200).entity("Successfully updated RoutingEdge").build();
-		else
-			return Response.status(500).entity("Could not update the requested RoutingEdge").build();
+		return Response.status(501).entity("not implemented").build();
+
+//		db = new RoutingEdgeMySQL();			
+//		
+//		boolean roomUpdated = db.updateRoutingEdge(updatedRoutingEdge);
+//				
+//		db.close();
+//		
+//		if (roomUpdated)
+//			return Response.status(200).entity("Successfully updated RoutingEdge").build();
+//		else
+//			return Response.status(500).entity("Could not update the requested RoutingEdge").build();
 		
 	}	
 	

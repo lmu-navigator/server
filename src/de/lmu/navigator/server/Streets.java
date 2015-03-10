@@ -80,54 +80,26 @@ public class Streets {
 		return list;
 	}
 	
-	
-	/**
-	 * Delete the specified Street RECURSIVELY! (all corresponding Floors and Rooms will also be deleted)
-	 * REST: /streets/{id} (DELETE)
-	 * 
-	 * Note: no authentication or security checks implemented so far!
-	 * 	--> TODO
-	 */
-	@DELETE
-	@Path("/{code}")
-	public Response deleteStreet (@PathParam("code") String streetCode) throws Exception {
-		
-		return Response.status(501).entity("not implemented").build();
-		
-//		db = new StreetMySQL();
-//		boolean elementsDeleted = db.deleteStreet(streetCode);
-//		db.close();
-//		
-//		if (elementsDeleted)
-//			return Response.status(200).entity("Street deleted successfully").build();
-//		else
-//			return Response.status(422).entity("Could not delete Street (e.g. invalid ID)").build();
-	
-	}
-	
 
 	/**
 	 * Update the specified Street
 	 * REST: /streets (UPDATE)
 	 * 
 	 * Note: no authentication or security checks implemented so far!
-	 * 	--> TODO
 	 */
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateStreet (Street updatedStreet) throws Exception {
 	
-		db = new StreetMySQL();			
+//		db = new StreetMySQL();			
+//		boolean streetUpdated = db.updateStreet(updatedStreet);
+//		db.close();
+//		if (streetUpdated)
+//			return Response.status(200).entity("Successfully updated Street").build();
+//		else
+//			return Response.status(405).entity("Could not update the requested Street").build();
 		
-		boolean streetUpdated = db.updateStreet(updatedStreet);
-		
-		db.close();
-		
-		if (streetUpdated)
-			return Response.status(200).entity("Successfully updated Street").build();
-		else
-			return Response.status(405).entity("Could not update the requested Street").build();
-		
+		return Response.status(501).entity("Not implemented").build();
 	}	
 	
 }

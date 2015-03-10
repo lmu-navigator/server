@@ -137,17 +137,19 @@ public class RoutingFloorConnections {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateRoutingFloorConnection (RoutingFloorConnection updatedRoutingFloorConnection) throws Exception {
-	
-		db = new RoutingFloorConnectionMySQL();			
-		
-		boolean roomUpdated = db.updateRoutingFloorConnection(updatedRoutingFloorConnection);
-				
-		db.close();
-		
-		if (roomUpdated)
-			return Response.status(200).entity("Successfully updated RoutingFloorConnection").build();
-		else
-			return Response.status(500).entity("Could not update the requested RoutingFloorConnection").build();
+
+		return Response.status(501).entity("not implemented").build();
+
+//		db = new RoutingFloorConnectionMySQL();			
+//		
+//		boolean roomUpdated = db.updateRoutingFloorConnection(updatedRoutingFloorConnection);
+//				
+//		db.close();
+//		
+//		if (roomUpdated)
+//			return Response.status(200).entity("Successfully updated RoutingFloorConnection").build();
+//		else
+//			return Response.status(500).entity("Could not update the requested RoutingFloorConnection").build();
 		
 	}	
 	

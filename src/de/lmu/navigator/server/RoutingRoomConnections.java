@@ -135,17 +135,19 @@ public class RoutingRoomConnections {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateRoutingRoomConnection (RoutingRoomConnection updatedRoutingRoomConnection) throws Exception {
-	
-		db = new RoutingRoomConnectionMySQL();			
-		
-		boolean roomUpdated = db.updateRoutingRoomConnection(updatedRoutingRoomConnection);
-				
-		db.close();
-		
-		if (roomUpdated)
-			return Response.status(200).entity("Successfully updated RoutingRoomConnection").build();
-		else
-			return Response.status(500).entity("Could not update the requested RoutingRoomConnection").build();
+
+		return Response.status(501).entity("not implemented").build();
+
+//		db = new RoutingRoomConnectionMySQL();			
+//		
+//		boolean roomUpdated = db.updateRoutingRoomConnection(updatedRoutingRoomConnection);
+//				
+//		db.close();
+//		
+//		if (roomUpdated)
+//			return Response.status(200).entity("Successfully updated RoutingRoomConnection").build();
+//		else
+//			return Response.status(500).entity("Could not update the requested RoutingRoomConnection").build();
 		
 	}	
 	

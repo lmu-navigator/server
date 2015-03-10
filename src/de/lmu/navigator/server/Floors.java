@@ -27,9 +27,7 @@ import de.lmu.navigator.server.model.Floor;
 @Path("/floors")
 public class Floors {
 	
-	private FloorMySQL db;	
-	
-	
+	private FloorMySQL db;		
 
 	/**
 	 * Request a single Floor (identified by an ID)
@@ -100,31 +98,6 @@ public class Floors {
 	
 	
 	/**
-	 * Delete the specified Floor
-	 * REST: /floors/{id} (DELETE)
-	 * 
-	 * Note: no authentication or security checks implemented so far!
-	 * 	--> TODO
-	 */
-	@DELETE
-	@Path("/{code}")
-	public Response deleteFloor (@PathParam("code") String floorCode) throws Exception {
-		
-		return Response.status(501).entity("not implemented").build();
-		
-//		db = new FloorMySQL();
-//		boolean elementsDeleted = db.deleteFloorAndRooms(floorCode);
-//		db.close();
-//		
-//		if (elementsDeleted)
-//			return Response.status(200).entity("Floor deleted successfully").build();
-//		else
-//			return Response.status(422).entity("Floor could not be deleted (e.g. invalid ID)").build();
-	
-	}
-	
-	
-	/**
 	 * Update the specified Floor
 	 * REST: /floors (UPDATE)
 	 * 
@@ -135,17 +108,18 @@ public class Floors {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateRoom (Floor updatedFloor) throws Exception {
 	
-		db = new FloorMySQL();			
+//		db = new FloorMySQL();			
+//		
+//		boolean floorUpdated = db.updateFloor(updatedFloor);
+//				
+//		db.close();
+//		
+//		if (floorUpdated)
+//			return Response.status(200).entity("Successfully updated floor").build();
+//		else
+//			return Response.status(500).entity("Could not update the requested floor").build();
 		
-		boolean floorUpdated = db.updateFloor(updatedFloor);
-				
-		db.close();
-		
-		if (floorUpdated)
-			return Response.status(200).entity("Successfully updated floor").build();
-		else
-			return Response.status(500).entity("Could not update the requested floor").build();
-		
+		return Response.status(501).entity("Not implemented").build();
 	}	
 	
 }

@@ -84,31 +84,6 @@ public class BuildingParts {
 		return list;
 	}
 	
-	
-	/**
-	 * Delete the specified BuildingPart RECURSIVELY! (all corresponding Floors and Rooms will also be deleted)
-	 * REST: /buildingparts/{id} (DELETE)
-	 * 
-	 * Note: no authentication or security checks implemented so far!
-	 * 	--> TODO
-	 */
-	@DELETE
-	@Path("/{code}")
-	public Response deleteBuildingPart (@PathParam("code") String buildingPartCode) throws Exception {
-		
-		return Response.status(501).entity("not implemented").build();
-		
-//		db = new BuildingPartMySQL();
-//		boolean elementsDeleted = db.deleteBuildingPart(buildingPartCode);
-//		db.close();
-//		
-//		if (elementsDeleted)
-//			return Response.status(200).entity("BuildingPart deleted successfully").build();
-//		else
-//			return Response.status(422).entity("Could not delete BuildingPart (e.g. invalid ID)").build();
-	
-	}
-	
 
 	/**
 	 * Update the specified BuildingPart
@@ -121,17 +96,15 @@ public class BuildingParts {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateBuildingPart (BuildingPart updatedBuilding) throws Exception {
 	
-		db = new BuildingPartMySQL();			
+//		db = new BuildingPartMySQL();			
+//		boolean buildingPartUpdated = db.updateBuildingPart(updatedBuilding);
+//		db.close();
+//		if (buildingPartUpdated)
+//			return Response.status(200).entity("Successfully updated BuildingPart").build();
+//		else
+//			return Response.status(405).entity("Could not update the requested BuildingPart").build();
 		
-		boolean buildingPartUpdated = db.updateBuildingPart(updatedBuilding);
-		
-		db.close();
-		
-		if (buildingPartUpdated)
-			return Response.status(200).entity("Successfully updated BuildingPart").build();
-		else
-			return Response.status(405).entity("Could not update the requested BuildingPart").build();
-		
+		return Response.status(501).entity("Not implemented").build();
 	}	
 	
 }

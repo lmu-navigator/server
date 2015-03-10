@@ -139,17 +139,19 @@ public class RoutingNodes {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateRoutingNode (RoutingNode updatedRoutingNode) throws Exception {
-	
-		db = new RoutingNodeMySQL();			
+
+		return Response.status(501).entity("not implemented").build();
 		
-		boolean roomUpdated = db.updateRoutingNode(updatedRoutingNode);
-				
-		db.close();
-		
-		if (roomUpdated)
-			return Response.status(200).entity("Successfully updated RoutingNode").build();
-		else
-			return Response.status(500).entity("Could not update the requested RoutingNode").build();
+//		db = new RoutingNodeMySQL();			
+//		
+//		boolean roomUpdated = db.updateRoutingNode(updatedRoutingNode);
+//				
+//		db.close();
+//		
+//		if (roomUpdated)
+//			return Response.status(200).entity("Successfully updated RoutingNode").build();
+//		else
+//			return Response.status(500).entity("Could not update the requested RoutingNode").build();
 		
 	}	
 	

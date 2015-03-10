@@ -104,32 +104,6 @@ public class Rooms {
 	}
 	
 	
-	/**
-	 * Delete the specified Room
-	 * REST: /rooms/{code} (DELETE)
-	 * 
-	 * Note: no authentication or security checks implemented so far!
-	 * 	--> TODO
-	 */
-	@DELETE
-	@Path("/{code}")
-	public Response deleteRoom (@PathParam("code") String roomCode) throws Exception {
-	
-		return Response.status(501).entity("not implemented").build();
-		
-//		db = new RoomMySQL();			
-//		
-//		boolean roomDeleted = db.deleteRoom(roomCode);
-//				
-//		db.close();
-//		
-//		if (roomDeleted)
-//			return Response.status(200).entity("Successfully removed room").build();
-//		else
-//			return Response.status(500).entity("Could not delete the requested room").build();
-		
-	}
-	
 	
 	/**
 	 * Update the specified Room
@@ -142,17 +116,18 @@ public class Rooms {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateRoom (Room updatedRoom) throws Exception {
 	
-		db = new RoomMySQL();			
-		
-		boolean roomUpdated = db.updateRoom(updatedRoom);
-				
-		db.close();
-		
-		if (roomUpdated)
-			return Response.status(200).entity("Successfully updated room").build();
-		else
-			return Response.status(500).entity("Could not update the requested room").build();
-		
+//		db = new RoomMySQL();			
+//		
+//		boolean roomUpdated = db.updateRoom(updatedRoom);
+//				
+//		db.close();
+//		
+//		if (roomUpdated)
+//			return Response.status(200).entity("Successfully updated room").build();
+//		else
+//			return Response.status(500).entity("Could not update the requested room").build();
+
+		return Response.status(501).entity("Not implemented").build();
 	}	
 	
 
