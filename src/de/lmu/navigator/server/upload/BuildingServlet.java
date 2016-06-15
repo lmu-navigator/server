@@ -7,34 +7,27 @@
 
 package de.lmu.navigator.server.upload;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import de.lmu.navigator.server.database.BuildingMySQL;
+import de.lmu.navigator.server.model.Building;
+import de.lmu.navigator.server.model.Settings;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import de.lmu.navigator.server.database.BuildingMySQL;
-import de.lmu.navigator.server.model.Building;
-import de.lmu.navigator.server.model.Settings;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class BuildingServlet extends HttpServlet {
 	
 	// params to validate CSV file against
-	final String[] csvParams = new String[] {"BWCode", "Stadtcode", "Straﬂencode", "Benennung"};
+	final String[] csvParams = new String[] {"BWCode", "Stadtcode", "Stra√üencode", "Benennung"};
 
 	private static final long serialVersionUID = 1L;
 	private Settings settings;

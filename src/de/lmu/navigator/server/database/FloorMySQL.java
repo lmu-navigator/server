@@ -40,7 +40,7 @@ public class FloorMySQL {
 		try {
 			// execute sql query
 			preparedStatement = connect
-					.prepareStatement("INSERT INTO 5_floor VALUES (default, ?, ?, ?, ?, ?, ?, ?)");
+					.prepareStatement("INSERT INTO 5_floor VALUES (default, ?, ?, ?, ?, ?, ?, ?, default)");
 			
 			preparedStatement.setString(1, code);
 			preparedStatement.setString(2, buildingPartCode);
@@ -272,7 +272,7 @@ public class FloorMySQL {
 	/**
 	 * Load all of the adjacent/bordering floors from the DB, which are associated to the same
 	 * PDF file (MapUri) in the database. This is a special case for buildings like the Hauptgebaeude
-	 * (Ludwigstraße 27 / Schellingstraße / Geschwister-Scholl-Platz).
+	 * (Ludwigstraï¿½e 27 / Schellingstraï¿½e / Geschwister-Scholl-Platz).
 	 * @param floorCode		of the floor to find the neighboors for
 	 * @return				will return all floors, excluding the floor itself (floorCode)
 	 */

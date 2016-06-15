@@ -27,7 +27,7 @@ import java.util.List;
 public class FloorServlet extends HttpServlet {
 	
 	// params to validate CSV file against
-	final String[] csvParams = new String[] {"GCode", "Stadtcode", "Straﬂencode", "BWCode", "BTCode", "Geschoss", "Benennung", "Dateiname"};
+	final String[] csvParams = new String[] {"GCode", "Stadtcode", "Stra√üencode", "BWCode", "BTCode", "Geschoss", "Benennung", "Dateiname"};
 
 	private static final long serialVersionUID = 1L;
 	private Settings settings;

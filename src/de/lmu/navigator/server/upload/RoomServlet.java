@@ -28,7 +28,7 @@ public class RoomServlet extends HttpServlet {
 	
 	// params to validate CSV file against
 	final String[] csvParams = new String[] { "GCode", "Stadtcode",
-			"Straﬂencode", "BWCode", "BTCode", "Geschoss", "Benennung",
+			"Stra√üencode", "BWCode", "BTCode", "Geschoss", "Benennung",
 			"Raumnummer", "RCode", "Dateiname" };
 
 	private static final long serialVersionUID = 1L;

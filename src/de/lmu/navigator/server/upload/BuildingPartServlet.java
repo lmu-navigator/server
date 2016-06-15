@@ -27,7 +27,7 @@ import java.util.List;
 public class BuildingPartServlet extends HttpServlet {
 	
 	// params to validate CSV file against
-	final String[] csvParams = new String[] {"BTCode", "Stadtcode", "Straﬂencode", "BWCode", "BauteilHaus"};
+	final String[] csvParams = new String[] {"BTCode", "Stadtcode", "Stra√üencode", "BWCode", "BauteilHaus"};
 
 	private static final long serialVersionUID = 1L;
 	private Settings settings;

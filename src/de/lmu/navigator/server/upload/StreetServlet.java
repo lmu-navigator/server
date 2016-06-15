@@ -27,7 +27,7 @@ import java.util.List;
 public class StreetServlet extends HttpServlet {
 	
 	// params to validate CSV file against
-	final String[] csvParams = new String[] {"Straﬂencode", "Stadtcode", "Straﬂe", "Dateiname"};
+	final String[] csvParams = new String[] {"Stra√üencode", "Stadtcode", "Stra√üe", "Dateiname"};
 
 	private static final long serialVersionUID = 1L;
 	private Settings settings;
