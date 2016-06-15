@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="lmu-navigator:war">
+    <output-path>$PROJECT_DIR$/build/artifacts/lmu_navigator_war</output-path>
+    <root id="archive" name="lmu-navigator_war.war">
+      <element id="artifact" artifact-name="lmu-navigator:war exploded" />
+    </root>
+  </artifact>
+</component>

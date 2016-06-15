@@ -3,8 +3,8 @@ package de.lmu.navigator.server.data;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,13 +34,13 @@ public class RoomCoordsImporter {
 	 * Method for finding Rooms in PDF file
 	 * @author Timo Loewe
 	 * 
-	 * @param file
+	 * @param fileUrl
 	 * @param roomList
 	 * @return
 	 * @throws IOException
 	 */
-    public static Map<String, double[]> findRoomCoords(File file, List<String> roomList) throws IOException {
-    	PDDocument document = PDDocument.load(file);
+    public static Map<String, double[]> findRoomCoords(URL fileUrl, List<String> roomList) throws IOException {
+    	PDDocument document = PDDocument.load(fileUrl);
 
         PDFTextStripper stripper = new PDFTextStripper();
         stripper.setWordSeparator(" ");

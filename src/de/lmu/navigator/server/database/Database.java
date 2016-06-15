@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class Database {
 	
-	private static final boolean PRODUCTION_SERVER = false; 
+	private static final boolean PRODUCTION_SERVER = false;
 
 	public Connection Get_Connection() throws Exception {
 		
@@ -24,7 +24,7 @@ public class Database {
 				server = "localhost";
 				database = "lmu_navigator";
 				user = "lmu_navigator";
-				password = "Q35dvmVLQGmfu7vG";
+				password = "lmu_navigator";
 			}
 
 			connectionURL = "jdbc:mysql://"+server+":3306/"+database;

@@ -8,9 +8,9 @@ import de.lmu.navigator.server.model.Settings;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -141,14 +141,10 @@ public class CalculateRoomPosition extends HttpServlet {
 		}
 		
 		/* link PDF file */
-		File pdfFile = new File(pathToPDF, f.getMapUri());
-		if (!pdfFile.exists()) {
-			System.out.println(f.getMapUri() + " does not exist.");
-			return false;
-		}
+		URL pdfUrl = new URL(new URL(pathToPDF), f.getMapUri());
 
 		/* calculate Room positions */
-		Map<String, double[]> roomCoords = RoomCoordsImporter.findRoomCoords(pdfFile, rooms);
+		Map<String, double[]> roomCoords = RoomCoordsImporter.findRoomCoords(pdfUrl, rooms);
 		
 		double posX = 0, posY = 0;
 		

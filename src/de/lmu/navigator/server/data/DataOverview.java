@@ -23,7 +23,6 @@ public class DataOverview extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static String pathToPDF;
 	private static String pathToPNG;
-	private static String pathToHTTP;
 
 	private BuildingPartMySQL dbBuildingPart;
 	private RoomMySQL dbRoom;
@@ -44,15 +43,11 @@ public class DataOverview extends HttpServlet {
 		Settings settings = new Settings();	
 		pathToPDF = settings.getPathToPDF();
 		pathToPNG = settings.getPathToPNG();
-		pathToHTTP = settings.getPathToHTTP();
-		
+
 		/* Specify URIs for PDFs / PNGs */
-		out.println("Specify relevant directories on server<br/>");
-		
 		out.println("<form name=\"location\" id=\"form\" action=\"\" method=\"post\" enctype=\"multipart/form-data\">");
-		out.println("PDFs: <input type=\"text\" size=\"50\" name=\"pdfLocation\" value=\""+pathToPDF+"\"><br />");
-		out.println("PNGs: <input type=\"text\" size=\"50\" name=\"pngLocation\" value=\""+pathToPNG+"\"><br />");
-		out.println("HTTP path: <input type=\"text\" size=\"50\" name=\"httpLocation\" value=\""+pathToHTTP+"\">");
+		out.println("URL to PDFs: <input type=\"text\" size=\"50\" name=\"pdfLocation\" value=\""+pathToPDF+"\"><br />");
+		out.println("URL to PNGs: <input type=\"text\" size=\"50\" name=\"pngLocation\" value=\""+pathToPNG+"\"><br />");
 		out.println("<input type=\"submit\" value=\"Update\"></form>");
 
 		/* Instructions and Links with Actions */
@@ -143,7 +138,7 @@ public class DataOverview extends HttpServlet {
 						out.println("<td>0"+hidden+"</td>");
 	
 					// PDF URI
-					out.println("<td><a href=\""+pathToHTTP+"/pdf/"+f.getMapUri()+"\" target=\"_blank\">"+f.getMapUri()+"</a></td>");
+					out.println("<td><a href=\""+pathToPDF+f.getMapUri()+"\" target=\"_blank\">"+f.getMapUri()+"</a></td>");
 					
 					// Map Size
 					if (f.getMapSizeX() == 0 || f.getMapSizeY() == 0)
@@ -196,15 +191,20 @@ public class DataOverview extends HttpServlet {
 		HashMap<String, String> pathLocations = extractPathLocations(request); 
 		pathToPDF = pathLocations.get("pdfLocation");
 		pathToPNG = pathLocations.get("pngLocation");
-		pathToHTTP = pathLocations.get("httpLocation");
-		
-		/* update pdfLocation in DB */
 
-		Settings settings = new Settings();	
+		/* update pdfLocation in DB */
+		if (!pathToPDF.endsWith("/")) {
+			pathToPDF = pathToPDF + "/";
+		}
+
+		if (!pathToPNG.endsWith("/")) {
+			pathToPNG = pathToPNG + "/";
+		}
+
+		Settings settings = new Settings();
 		settings.setPathToPDF(pathToPDF);
 		settings.setPathToPNG(pathToPNG);
-		settings.setPathToHTTP(pathToHTTP);
-		
+
 		/* reload GET page */
 		doGet(request, response);
 	}
@@ -230,13 +230,12 @@ public class DataOverview extends HttpServlet {
 
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
-		
-			
+
 		try {
 			List<FileItem> fields = upload.parseRequest(request);
 			
 			// important! adjust the field size when adding a new parameter
-			if (fields.size() != 3) {
+			if (fields.size() != 2) {
 				System.out.println("Number of fields/files has been varied");
 				return null;
 			}

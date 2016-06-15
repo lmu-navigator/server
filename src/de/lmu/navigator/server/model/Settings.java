@@ -14,7 +14,6 @@ public class Settings {
 
     private String pathToPDF;
     private String pathToPNG;
-    private String pathToHTTP;
 
     private SettingsMySQL db;
     private VersionMySQL dbVersion;
@@ -26,7 +25,6 @@ public class Settings {
 			db = new SettingsMySQL();
 			this.pathToPDF = db.readPdfLocation();
 			this.pathToPNG = db.readPngLocation();
-			this.pathToHTTP = db.readHttpLocation();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} finally {
@@ -38,8 +36,7 @@ public class Settings {
 	@Override
 	public String toString() {
 		return "Settings [pathToPDF=" + pathToPDF + ", pathToPNG=" + pathToPNG
-				+ ", pathToHTTP=" + pathToHTTP + ", db=" + db + ", dbVersion="
-				+ dbVersion + "]";
+				+ ", db=" + db + ", dbVersion=" + dbVersion + "]";
 	}
 
 
@@ -76,23 +73,6 @@ public class Settings {
 			db.close();
 		}
 	}
-	
-	public String getPathToHTTP() {
-		return pathToHTTP;
-	}
-
-	public void setPathToHTTP(String pathToHTTP) {
-		try {
-			db = new SettingsMySQL();
-			if (db.updateHttpLocation(pathToHTTP))
-				this.pathToHTTP = pathToHTTP;
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		} finally {
-			db.close();
-		}
-	}
-	
 	
 	public Version getVersion() {
 		Version v = null;

@@ -4,23 +4,20 @@ import de.lmu.navigator.server.database.FloorMySQL;
 import de.lmu.navigator.server.model.Floor;
 import de.lmu.navigator.server.model.Settings;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class CalculateMapSize extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
-	private String pathToPNG;
-	private ArrayList<File> pngFiles;
-	private FloorMySQL dbFloor;
-	
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		
@@ -28,48 +25,44 @@ public class CalculateMapSize extends HttpServlet {
 		PrintWriter out = response.getWriter();
 	
 		/* load settings: pathToPNG */
-		Settings settings = new Settings();	
-		pathToPNG = settings.getPathToPNG();
-		
-		// TODO: maybe check if path was set correctly */
-		
-		/* load	MapUri from DB (5_floor) */
-		setPngFiles(new ArrayList<File>());
-		ArrayList<Floor> floors = new ArrayList<Floor>();
-		Dimension d;
-		
+		Settings settings = new Settings();
+		String pathToPNG = settings.getPathToPNG();
+
+		FloorMySQL dbFloor = null;
 		try {
+			/* load	MapUri from DB (5_floor) */
 			dbFloor = new FloorMySQL();
-			floors = dbFloor.loadFilteredFloors("", "", true);
+			ArrayList<Floor> floors = dbFloor.loadFilteredFloors("", "", true);
 		
 			for(Floor f : floors) {
 				// rename from .pdf to .png
 				String filename = f.getMapUri();
 				filename = FileUtils.renameFileExtension(filename, "png");
 				
-				// check if file exists
-				File file = new File(pathToPNG, filename);
-	
-				if (file.exists()) {
-					// call getImageDimension()
-					d = FileUtils.getImageDimension(file);
-	
-					// cast from double -> int
-					boolean success = dbFloor.updateMapSize((int)d.getWidth(), (int)d.getHeight(), f.getCode());
-					if (!success) {
-						out.println("Error updating record in DB");
-						return;
+				URL imageUrl = new URL(new URL(pathToPNG), filename);
+				try {
+					BufferedImage image = ImageIO.read(imageUrl);
+					if (image != null) {
+						boolean success = dbFloor.updateMapSize(image.getWidth(), image.getHeight(), f.getCode());
+						if (!success) {
+							throw new Exception("Error updating record in DB");
+						}
+					} else {
+						System.out.println("Could not find png file for pdf: " + f.getMapUri());
 					}
-				} else {
-                    System.out.println("Could not find png file for pdf: " + f.getMapUri());
-                }
+				} catch (Exception e) {
+					System.out.println("Could not find png file for pdf: " + f.getMapUri());
+					e.printStackTrace();
+				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			settings.addVersion("updated mapSize of all floorPlans");
-			dbFloor.close();
+			if (dbFloor != null) {
+				dbFloor.close();
+			}
 		}
 		
 		/* redirect back to DataOverview */
@@ -82,15 +75,4 @@ public class CalculateMapSize extends HttpServlet {
 			throws IOException {
 		doGet(request, response);
 	}
-
-
-	public ArrayList<File> getPngFiles() {
-		return pngFiles;
-	}
-
-
-	public void setPngFiles(ArrayList<File> pngFiles) {
-		this.pngFiles = pngFiles;
-	}
-
 }
