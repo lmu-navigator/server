@@ -1,3 +1,4 @@
+var scrollPosition = 0;
 
 /**
  * Cross iFrame-communication code
@@ -5,7 +6,7 @@
 $(function() {
 	$('.position').click( function() {
 		scrollToIFrame();
-		
+
 		// get the Code of the floor to be updated
 		var floorCode = $(this).closest("tr").attr( "floor" );
 		document.getElementById("TileViewer").contentWindow.positionRoomManually(floorCode);
@@ -29,7 +30,7 @@ $(document).keyup(function(e) {
 
 
 /**
- * Update the coordinates of the room 
+ * Update the coordinates of the room
  * @param roomCode	room to update
  * @param x			new x-coordinate for the room
  * @param y			new y-coordinate for the room
@@ -38,29 +39,26 @@ function updatedRoomPosition(roomCode, x, y) {
 	// update X value
 	$("input[name='lat-"+roomCode+"']").val(x).removeClass("missing")
 	 .addClass("highlight");
-	
+
 	// update Y value
 	$("input[name='lng-"+roomCode+"']").val(y).removeClass("missing")
 	.addClass("highlight");
-	
+
 	scrollToTop();
-	
-	// animate change
-	
-	
 }
 
 /**
  * Scroll animations
- */ 
+ */
 function scrollToTop() {
 	$('html, body').animate({
-        scrollTop: $( 'table' ).offset().top
+        scrollTop: scrollPosition
     }, 500);
 }
 
 function scrollToIFrame() {
+	scrollPosition = document.body.scrollTop;
 	$('html, body').animate({
-        scrollTop: $( 'iframe' ).offset().top
+        scrollTop: $('iframe').offset().top
     }, 500);
 }
